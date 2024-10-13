@@ -1,0 +1,544 @@
+openapi: 3.1.0
+info:
+  title: pony.find clients backend API
+  version: '0.1.0'
+servers:
+  - url: /api/v1
+paths:
+  /profiles:
+    get:
+      summary: Get current user profiles
+      parameters:
+        - name: limit
+          in: query
+          required: true
+          schema:
+            type: integer
+        - name: offset
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Success operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/profile'
+                  count:
+                    type: integer
+                  total:
+                    type: integer
+                required:
+                  - items
+                  - count
+                  - total
+        '400':
+          description: 4xx codes errors
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '500':
+          description: 5xx codes errors
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+    post:
+      summary: Create new profile
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/profile'
+      responses:
+        '201':
+          description: Success operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/profile'
+        '400':
+          description: 4xx codes errors
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '500':
+          description: 5xx codes errors
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+  /profiles/{id}:
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: Profile ID
+    get:
+      summary: Get profile by ID
+      responses:
+        '200':
+          description: Success operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/profile'
+        '400':
+          description: 4xx codes errors
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '500':
+          description: 5xx codes errors
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+    delete:
+      summary: Archive profile
+      responses:
+        '204':
+          description: Success operation
+        '400':
+          description: 4xx codes errors
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '500':
+          description: 5xx codes errors
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+    patch:
+      summary: Update profile
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/profile'
+      responses:
+        '200':
+          description: Success operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/profile'
+        '400':
+          description: 4xx codes errors
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '500':
+          description: 5xx codes errors
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+  /profiles/{id}/matches:
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: Profile ID
+      - name: limit
+        in: query
+        required: true
+        schema:
+          type: integer
+      - name: offset
+        in: query
+        required: true
+        schema:
+          type: integer
+    get:
+      summary: Get a list of matched profiles for a particular profile
+      responses:
+        '200':
+          description: Success operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/profile'
+                  count:
+                    type: integer
+                  total:
+                    type: integer
+                required:
+                  - items
+                  - count
+                  - total
+        '400':
+          description: 4xx codes errors
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '500':
+          description: 5xx codes errors
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+  /profiles/matches/{id}:
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: Match ID
+    get:
+      summary: Get a specific profile match by ID
+      responses:
+        '200':
+          description: Success operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/profile'
+        '400':
+          description: 4xx codes errors
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '500':
+          description: 5xx codes errors
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+  /profiles/{id}/matches/history:
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: Profile ID
+      - name: limit
+        in: query
+        required: true
+        schema:
+          type: integer
+      - name: offset
+        in: query
+        required: true
+        schema:
+          type: integer
+    get:
+      summary: Get a history of matches for a specific profile
+      responses:
+        '200':
+          description: Success operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/historyItem'
+                  count:
+                    type: integer
+                  total:
+                    type: integer
+                required:
+                  - items
+                  - count
+                  - total
+        '400':
+          description: 4xx codes errors
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '500':
+          description: 5xx codes errors
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+  /profiles/{id}/matches/dates:
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: Profile ID
+      - name: limit
+        in: query
+        required: true
+        schema:
+          type: integer
+      - name: offset
+        in: query
+        required: true
+        schema:
+          type: integer
+    get:
+      summary: Get dates for matched profile
+      responses:
+        '200':
+          description: Success operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/profile'
+                  count:
+                    type: integer
+                  total:
+                    type: integer
+                required:
+                  - items
+                  - count
+                  - total
+        '400':
+          description: 4xx codes errors
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '500':
+          description: 5xx codes errors
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+  /profiles/matches/{id}/like:
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: Match ID
+    post:
+      summary: Like the profile match
+      responses:
+        '204':
+          description: Success operation
+        '400':
+          description: 4xx codes errors
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '500':
+          description: 5xx codes errors
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+  /profiles/matches/{id}/dislike:
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: Match ID
+    post:
+      summary: Dislike the profile match
+      responses:
+        '204':
+          description: Success operation
+        '400':
+          description: 4xx codes errors
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '500':
+          description: 5xx codes errors
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+  /profiles/matches/{id}/skip:
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: Match ID
+    post:
+      summary: Skip the profile match
+      responses:
+        '204':
+          description: Success operation
+        '400':
+          description: 4xx codes errors
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '500':
+          description: 5xx codes errors
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+  /profiles/matches/{id}/report:
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: Match ID
+    post:
+      summary: Report the profile match
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                reason:
+                  type: string
+                  enum:
+                    - spam
+                    - advertising
+                    - porn
+                    - custom
+                description:
+                  type: string
+              required:
+                - reason
+      responses:
+        '200':
+          description: Success operation
+        '400':
+          description: 4xx codes errors
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '500':
+          description: 5xx codes errors
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+components:
+  schemas:
+    image:
+      type: object
+      properties:
+        url:
+          type: string
+    profile:
+      type: object
+      properties:
+        user_id:
+          type: string
+          format: uuid
+          nullable: true
+          description: only for moderators usage
+        id:
+          type: string
+          format: uuid
+          nullable: true
+          description: profile id shows only for owner or moderator
+        match_id:
+          type: string
+          format: uuid
+          nullable: true
+          description: for matches routes usage
+        name:
+          type: string
+        birthdate:
+          type: string
+          format: date
+        fandoms:
+          type: array
+          items:
+            $ref: '#/components/schemas/fandom'
+        image:
+          type: array
+          items:
+            $ref: '#/components/schemas/image'
+    fandom:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        color:
+          type: string
+        emoji:
+          type: string
+        icon:
+          $ref: '#/components/schemas/image'
+    historyItem:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        match_id:
+          type: string
+          format: uuid
+        profile:
+          $ref: '#/components/schemas/profile'
+        action_type:
+          type: string
+          enum:
+            - like
+            - dislike
+    error:
+      type: object
+      properties:
+        type:
+          type: string
+        description:
+          type: string
+          nullable: true
+        details:
+          type: object
+          nullable: true
